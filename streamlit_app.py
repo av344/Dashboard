@@ -49,6 +49,16 @@ def calculate_returns(latest_prices, purchase_prices, portfolio):
     
     return returns, roi_percentages, total_return, combined_roi_percentage
 
+# Calculate S&P 500 return percentage
+def calculate_sp500_return(start_date):
+    sp500 = "^GSPC"
+    # Fetch S&P 500 historical data
+    data = yf.download(sp500, start=start_date, end=datetime.today().strftime('%Y-%m-%d'))
+    start_price = data['Adj Close'].iloc[0]
+    latest_price = data['Adj Close'].iloc[-1]
+    sp500_return_percentage = ((latest_price - start_price) / start_price) * 100
+    return sp500_return_percentage
+
 # Calculate the difference in months since the portfolio start date
 def calculate_months_difference(start_date):
     start_date = datetime.strptime(start_date, '%Y-%m-%d')
@@ -68,6 +78,9 @@ def main():
 
     # Calculate months since portfolio started
     months_difference = calculate_months_difference(portfolio_start_date)
+    
+    # Calculate S&P 500 return
+    sp500_return_percentage = calculate_sp500_return(portfolio_start_date)
 
     # Display latest prices
     st.write("## Latest Prices")
@@ -79,8 +92,12 @@ def main():
         st.write(f"{ticker}: ${return_value:.2f} ({roi_percentages[ticker]:.2f}%)")
 
     # Display combined return
-    st.write(f"## Combined Return of Portfolio")
+    st.write("## Combined Return of Portfolio")
     st.write(f"Total Return: ${total_return:.2f} ({combined_roi_percentage:.2f}%)")
+
+    # Display S&P 500 return
+    st.write("## S&P 500 Return")
+    st.write(f"S&P 500 Return: {sp500_return_percentage:.2f}%")
 
     # Display months since start of portfolio
     st.write(f"## Months Since Portfolio Start: {months_difference} months")
