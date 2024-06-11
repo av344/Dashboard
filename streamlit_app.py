@@ -1,5 +1,5 @@
 
-# pip install streamlit yfinance pandas numpy matplotlib seaborn 
+pip install streamlit yfinance pandas numpy matplotlib seaborn 
 
 # Import Libraries
 import streamlit as st
